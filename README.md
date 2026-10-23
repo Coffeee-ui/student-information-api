@@ -1,5 +1,3 @@
-Project Demonstrating CRUD, GIT and GITHUB useage.
-
 # Student Information API
  
 A RESTful backend API built with Node.js, Express, TypeScript, and Supabase PostgreSQL for **ITE 303 — Web Systems and Technologies 2**.
@@ -33,3 +31,6 @@ A RESTful backend API built with Node.js, Express, TypeScript, and Supabase Post
 | `POST` | `/students` | Create a new student record | `201 Created` |
 | `PUT` | `/students/:id` | Replace all editable fields of a student | `200 OK` |
 | `DELETE` | `/students/:id` | Delete a student record by ID | `200 OK` |
+
+### Created By
+Student for demonstrating a CRUD, Github and GIT useage. 
