@@ -38,6 +38,7 @@ services:
       - "${PORT:-3000}:3000"
     volumes:
       - ./src:/app/src
+      - ./public:/app/public
       - ./package.json:/app/package.json
       - ./tsconfig.json:/app/tsconfig.json
       - /app/node_modules
@@ -54,4 +55,3 @@ volumes:
 networks:
   app-network:
     driver: bridge
-

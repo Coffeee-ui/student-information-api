@@ -1,15 +1,42 @@
 # Student Information API
 
-A RESTful backend API built with Node.js, Express, TypeScript, and Supabase PostgreSQL for **ITE 303 — Web Systems and Technologies 2**.
+A RESTful backend API and interactive CRUD web client built with Node.js, Express, TypeScript, and PostgreSQL (Supabase / local Docker) for **ITE 303 — Web Systems and Technologies 2**.
 
 ## Features
 
-- Root & Health Check endpoints (`GET /`, `GET /health`)
+- Interactive CRUD Web User Interface (Create, Read, Update, Delete)
+- Health Check and System Status monitoring (`GET /health`)
 - Read all student records (`GET /students`)
 - Read a single student record by ID (`GET /students/:id`)
 - Create a new student record (`POST /students`)
 - Update an existing student record (`PUT /students/:id`)
-- Delete a student record (`DELETE /students/:id`)
+- Delete a student record with confirmation (`DELETE /students/:id`)
+
+## CRUD Demo UI
+
+A lightweight, responsive web client is bundled with the server to demonstrate all four CRUD operations without external frontend framework dependencies:
+
+- **Files Location**:
+  - `public/index.html`: Responsive interface with forms, tables, modals, and toasts.
+  - `public/css/styles.css`: Clean, accessible styling with high contrast and focus states.
+  - `public/js/api.js`: Decoupled API service module handling HTTP requests.
+  - `public/js/app.js`: Application controller managing state, DOM events, and validations.
+
+### How to Run the Demo
+
+1. Start the server (via `pnpm dev`, Docker, or Render):
+   ```bash
+   pnpm dev
+   ```
+2. Open your web browser and navigate to:
+   ```
+   http://localhost:3000
+   ```
+3. Test the operations:
+   - **Read**: Records are automatically fetched on page load and displayed in the table.
+   - **Create**: Fill in the "Add New Student" form and click **Add Student**. The new record appears in the list instantly.
+   - **Update**: Click **Edit** on any student row. The form pre-fills with existing data. Modify fields and click **Update Student**.
+   - **Delete**: Click **Delete** on any row. A confirmation modal will appear to confirm deletion before removing the record.
 
 ## Local Setup
 
@@ -122,7 +149,7 @@ If creating the service manually in the Render dashboard:
 
 | Method | Endpoint | Description | Success Status |
 | --- | --- | --- | --- |
-| `GET` | `/` | Root endpoint / Status check | `200 OK` |
+| `GET` | `/` | Web UI (HTML) or status check | `200 OK` |
 | `GET` | `/health` | Health check endpoint | `200 OK` |
 | `GET` | `/students` | Retrieve all student records | `200 OK` |
 | `GET` | `/students/:id` | Retrieve one student by ID | `200 OK` |

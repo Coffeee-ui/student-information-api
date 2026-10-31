@@ -75,6 +75,7 @@ RUN chown -R node:node /app
 COPY --from=prod-dependencies --chown=node:node /app/node_modules ./node_modules
 COPY --from=prod-dependencies --chown=node:node /app/package.json ./package.json
 COPY --from=builder --chown=node:node /app/dist ./dist
+COPY --chown=node:node public ./public
 
 USER node
 
@@ -84,4 +85,3 @@ HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
   CMD node -e "fetch('http://localhost:' + (process.env.PORT || 3000) + '/students').then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))"
 
 CMD ["node", "dist/server.js"]
-
