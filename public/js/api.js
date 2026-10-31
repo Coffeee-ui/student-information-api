@@ -1,20 +1,57 @@
 /**
  * API Service for Student CRUD operations.
- * Dynamically resolves the API base URL without hardcoded localhost.
+ * Dynamically resolves the API base URL for both development dev servers,
+ * external previews, and production deployments.
  */
 
-// Use window.__API_BASE__ if configured, otherwise fall back to relative path or origin
-const API_BASE = (typeof window !== 'undefined' && window.__API_BASE__) 
-  ? window.__API_BASE__.replace(/\/+$/, '') 
-  : '';
+function resolveApiBase() {
+  if (typeof window === 'undefined') return '';
 
+  // 1. Explicit global variable override
+  if (window.__API_BASE__ && typeof window.__API_BASE__ === 'string') {
+    return window.__API_BASE__.trim().replace(/\/+$/, '');
+  }
+
+  // 2. HTML meta tag override (convenient for production/CDN injections)
+  const metaTag = document.querySelector('meta[name="api-base"]');
+  const metaContent = metaTag?.getAttribute('content')?.trim();
+  if (metaContent) {
+    return metaContent.replace(/\/+$/, '');
+  }
+
+  // 3. Local development fallback when running via separate static servers
+  // (e.g. VS Code Live Server on port 5500, Vite on 5173, or file protocol)
+  const { protocol, hostname, port } = window.location;
+  if (protocol === 'file:') {
+    return 'http://localhost:3000';
+  }
+
+  const isLocalHost = hostname === 'localhost' || hostname === '127.0.0.1' || hostname === '[::1]';
+  if (isLocalHost && port && port !== '3000') {
+    return `http://${hostname}:3000`;
+  }
+
+  // 4. Same-origin default for Express-hosted dev, Render production, Docker, and reverse proxies
+  return '';
+}
+
+const API_BASE = resolveApiBase();
 const STUDENTS_URL = `${API_BASE}/students`;
 
 async function handleResponse(response) {
-  const contentType = response.headers.get('content-type');
+  // Support 204 No Content gracefully
+  if (response.status === 204) {
+    return null;
+  }
+
+  const contentType = response.headers.get('content-type') || '';
   let data = null;
-  if (contentType && contentType.includes('application/json')) {
-    data = await response.json();
+  if (contentType.includes('application/json')) {
+    try {
+      data = await response.json();
+    } catch {
+      data = null;
+    }
   }
 
   if (!response.ok) {

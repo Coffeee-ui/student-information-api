@@ -164,16 +164,20 @@ async function handleSubmit(e) {
       // Update existing student
       const updated = await StudentApi.update(state.editingId, payload);
       const index = state.students.findIndex((s) => s.id === state.editingId);
-      if (index !== -1) {
+      if (index !== -1 && updated) {
         state.students[index] = updated;
       }
-      showToast(`Student ${updated.student_number} updated successfully!`, 'success');
+      const studentNum = (updated && updated.student_number) ? updated.student_number : payload.student_number;
+      showToast(`Student ${studentNum} updated successfully!`, 'success');
       resetForm();
     } else {
       // Create new student
       const created = await StudentApi.create(payload);
-      state.students.push(created);
-      showToast(`Student ${created.student_number} created successfully!`, 'success');
+      if (created) {
+        state.students.push(created);
+      }
+      const studentNum = (created && created.student_number) ? created.student_number : payload.student_number;
+      showToast(`Student ${studentNum} created successfully!`, 'success');
       resetForm();
     }
     updateViews();
@@ -193,27 +197,36 @@ function setSubmitting(isSubmitting) {
 }
 
 // ==========================================
-// Edit Mode Handling
+// Edit Mode Handling (Single-Item Read & Pre-fill)
 // ==========================================
-function startEdit(id) {
-  const student = state.students.find((s) => s.id === id);
-  if (!student) return;
+async function startEdit(id) {
+  try {
+    // Perform single-item fetch to ensure authoritative database values
+    const student = await StudentApi.getById(id);
+    if (!student) return;
 
-  state.editingId = id;
-  studentNumberInput.value = student.student_number;
-  firstNameInput.value = student.first_name;
-  lastNameInput.value = student.last_name;
-  courseInput.value = student.course;
-  yearLevelInput.value = student.year_level;
+    state.editingId = id;
+    studentNumberInput.value = student.student_number;
+    firstNameInput.value = student.first_name;
+    lastNameInput.value = student.last_name;
+    courseInput.value = student.course;
+    yearLevelInput.value = student.year_level;
 
-  formTitle.textContent = `Edit Student #${student.id}`;
-  submitBtn.textContent = 'Update Student';
-  submitBtn.classList.remove('btn-primary');
-  submitBtn.classList.add('btn-primary');
-  cancelEditBtn.style.display = 'inline-flex';
+    formTitle.textContent = `Edit Student #${student.id}`;
+    submitBtn.textContent = 'Update Student';
+    cancelEditBtn.style.display = 'inline-flex';
 
-  // Highlight row and focus first input
-  studentNumberInput.focus();
+    // Highlight row and focus first input
+    studentNumberInput.focus();
+  } catch (err) {
+    console.error('Failed to load student for editing:', err);
+    showToast(err.message || 'Could not fetch student details.', 'error');
+    if (err.status === 404) {
+      // Remove stale record from table if already gone on server
+      state.students = state.students.filter((s) => s.id !== id);
+      updateViews();
+    }
+  }
 }
 
 function resetForm() {

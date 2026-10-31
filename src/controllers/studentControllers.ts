@@ -10,7 +10,8 @@ export async function getStudents(req: Request, res: Response): Promise<void> {
     `);
 
     res.status(200).json(result.rows);
-  } catch {
+  } catch (error) {
+    console.error('Failed to fetch students:', error);
     res.status(500).json({ message: 'Could not fetch students' });
   }
 }
@@ -39,7 +40,8 @@ export async function getStudentById(req: Request, res: Response): Promise<void>
     }
 
     res.status(200).json(result.rows[0]);
-  } catch {
+  } catch (error) {
+    console.error(`Failed to fetch student with ID ${id}:`, error);
     res.status(500).json({ message: 'Could not fetch student' });
   }
 }
@@ -82,6 +84,7 @@ export async function createStudent(req: Request, res: Response): Promise<void> 
       return;
     }
 
+    console.error('Failed to create student:', error);
     res.status(500).json({ message: 'Could not create student' });
   }
 }
@@ -140,6 +143,7 @@ export async function updateStudent(req: Request, res: Response): Promise<void> 
       return;
     }
 
+    console.error(`Failed to update student with ID ${id}:`, error);
     res.status(500).json({ message: 'Could not update student' });
   }
 }
@@ -169,7 +173,8 @@ export async function deleteStudent(req: Request, res: Response): Promise<void> 
       id: result.rows[0].id,
       student_number: result.rows[0].student_number
     });
-  } catch {
+  } catch (error) {
+    console.error(`Failed to delete student with ID ${id}:`, error);
     res.status(500).json({ message: 'Could not delete student' });
   }
 }
