@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: student-api
+    runtime: node
+    plan: free
+    buildCommand: pnpm install --prod=false && pnpm run build
+    startCommand: pnpm start
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: NODE_VERSION
+        value: 22
+      - key: DATABASE_URL
+        sync: false # Set your Supabase or Render Postgres connection string in the Render Dashboard
+

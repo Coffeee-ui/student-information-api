@@ -4,6 +4,7 @@ A RESTful backend API built with Node.js, Express, TypeScript, and Supabase Post
 
 ## Features
 
+- Root & Health Check endpoints (`GET /`, `GET /health`)
 - Read all student records (`GET /students`)
 - Read a single student record by ID (`GET /students/:id`)
 - Create a new student record (`POST /students`)
@@ -72,10 +73,57 @@ The production setup uses a multi-stage Docker build targeting the lightweight A
   docker compose -f docker-compose.prod.yml down
   ```
 
+## Deploying to Render
+
+This project is configured for deployment to [Render](https://render.com) as a **Web Service**.
+
+### Required Environment Variables
+| Variable | Value / Description |
+| :--- | :--- |
+| `NODE_ENV` | `production` |
+| `NODE_VERSION` | `22` |
+| `DATABASE_URL` | Your Supabase (or Render Postgres) connection string (e.g. `postgresql://...`) |
+
+### Method 1: Deploy with Render Blueprint (Recommended)
+This repository includes a `render.yaml` blueprint file for zero-config setup.
+1. In the Render Dashboard, click **New +** and select **Blueprint**.
+2. Connect your repository.
+3. Render reads `render.yaml` and prepares the `student-api` service.
+4. When prompted, enter your `DATABASE_URL` (your Supabase PostgreSQL URL).
+5. Click **Apply**. Render will automatically build, deploy, and verify the health check.
+
+### Method 2: Manual Web Service Setup
+If creating the service manually in the Render dashboard:
+1. Click **New +** -> **Web Service** and connect your GitHub repository.
+2. Configure the following service settings:
+   - **Name**: `student-api`
+   - **Runtime**: `Node`
+   - **Branch**: `main`
+   - **Build Command**:
+     ```bash
+     pnpm install --prod=false && pnpm run build
+     ```
+   - **Start Command**:
+     ```bash
+     pnpm start
+     ```
+   - **Health Check Path**: `/health`
+3. Under **Environment Variables**, add:
+   - `NODE_ENV`: `production`
+   - `NODE_VERSION`: `22`
+   - `DATABASE_URL`: `your_supabase_postgresql_connection_string`
+4. Click **Deploy Web Service**.
+
+### Redeploying
+- **Automatic**: Pushes to the `main` branch automatically trigger a new deployment.
+- **Manual**: In the Render dashboard, open your service and click **Manual Deploy** -> **Deploy latest commit** or **Clear build cache & deploy**.
+
 ## API Endpoints
 
 | Method | Endpoint | Description | Success Status |
 | --- | --- | --- | --- |
+| `GET` | `/` | Root endpoint / Status check | `200 OK` |
+| `GET` | `/health` | Health check endpoint | `200 OK` |
 | `GET` | `/students` | Retrieve all student records | `200 OK` |
 | `GET` | `/students/:id` | Retrieve one student by ID | `200 OK` |
 | `POST` | `/students` | Create a new student record | `201 Created` |
