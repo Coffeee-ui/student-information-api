@@ -1,0 +1,40 @@
+# Version control
+.git
+.gitignore
+
+# Dependencies & package manager stores
+node_modules
+.pnpm-store
+
+# Build artifacts & caches
+dist
+*.tsbuildinfo
+
+# Environment and secrets (never leak credentials into Docker images)
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Docker files
+Dockerfile*
+docker-compose*.yml
+docker/
+
+# Editor and OS metadata
+.vscode
+.idea
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Documentation & tests
+README.md
+
