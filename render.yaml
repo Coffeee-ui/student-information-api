@@ -13,5 +13,5 @@ services:
       - key: NODE_VERSION
         value: 22
       - key: DATABASE_URL
-        sync: True # Set your Supabase or Render Postgres connection string in the Render Dashboard
+        sync: true # Set your Supabase or Render Postgres connection string in the Render Dashboard
 
