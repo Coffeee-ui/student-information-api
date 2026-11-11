@@ -2,16 +2,10 @@
   "name": "student-api_3.4",
   "version": "1.0.0",
   "description": "",
-  "main": "dist/server.js",
-  "type": "module",
+  "main": "index.js",
   "scripts": {
     "dev": "tsx watch src/server.ts",
-    "build": "tsc",
-    "start": "node dist/server.js",
     "typecheck": "tsc --noEmit"
-  },
-  "engines": {
-    "node": ">=20.0.0"
   },
   "keywords": [],
   "author": "",
@@ -24,6 +18,7 @@
     }
   },
   "packageManager": "pnpm@12.15.0",
+  "type": "module",
   "dependencies": {
     "dotenv": "^18.0.7",
     "express": "^5.3.0",
