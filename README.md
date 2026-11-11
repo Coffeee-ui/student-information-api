@@ -1,3 +1,5 @@
+Project Demonstrating CRUD, GIT and GITHUB useage.
+
 # Student Information API
 
 A RESTful backend API and interactive CRUD web client built with Node.js, Express, TypeScript, and PostgreSQL (Supabase / local Docker) for **ITE 303 — Web Systems and Technologies 2**.
@@ -155,7 +157,11 @@ If creating the service manually in the Render dashboard:
 | `GET` | `/students/:id` | Retrieve one student by ID | `200 OK` |
 | `POST` | `/students` | Create a new student record | `201 Created` |
 | `PUT` | `/students/:id` | Replace all editable fields of a student | `200 OK` |
+<<<<<<< HEAD
 | `DELETE` | `/students/:id` | Delete a student record by ID | `200 OK` |
 
 ### Created By
 Student for demonstrating a CRUD, Github and GIT useage.
+=======
+| `DELETE` | `/students/:id` | Delete a student record by ID | `200 OK` |
+>>>>>>> parent of ba9f0fe (Update README.md to refine project description and clarify CRUD demonstration)
