@@ -16,10 +16,15 @@ A RESTful backend API built with Node.js, Express, TypeScript, and Supabase Post
    ```bash
    pnpm install
    ```
-2. Copy `.env.example` to `.env` and add your private Supabase PostgreSQL connection string.
-3. Start the development server:
+2. Copy `.env.example` to `.env` and fill in your private Supabase Session pooler `DATABASE_URL`.
+3. Run in development mode:
    ```bash
    pnpm dev
+   ```
+4. Build and run for production:
+   ```bash
+   pnpm build
+   pnpm start
    ```
 
 ## API Endpoints
